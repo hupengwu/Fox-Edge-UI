@@ -1,0 +1,177 @@
+<script lang="ts">
+export default {
+  name: "DeviceValueEntityTable"
+}
+</script>
+
+<template>
+  <!-- 数据表单 -->
+  <el-table
+    ref="dataTableRef"
+    v-loading="loading"
+    :data="entityList"
+    border
+    highlight-current-row
+    @selection-change="handleSelectionChange"
+    @row-click="handleRowClick"
+  >
+    <el-table-column align="center" min-width="40" type="selection"/>
+    <el-table-column align="center" label="对象ID" min-width="80" prop="id"/>
+    <el-table-column label="设备名称" min-width="200" prop="deviceName"/>
+    <el-table-column label="设备类型" min-width="120" prop="deviceType"/>
+    <el-table-column label="对象名称" min-width="150" prop="objectName"/>
+    <el-table-column label="对象数值" min-width="120" prop="objectValue"/>
+    <el-table-column label="过期时间(秒)" min-width="120" prop="objectTime"/>
+    <el-table-column :formatter="formatDate4elTableColumn" align="center" label="创建时间" prop="createTime" width="180"/>
+    <el-table-column :formatter="formatDate4elTableColumn" align="center" label="更新时间" prop="updateTime" width="180"/>
+  </el-table>
+
+  <!-- 分页工具条 -->
+  <pagination v-if="total > 0" v-model:limit="queryParams.pageSize" v-model:page="queryParams.pageNum" :total="total"
+              @pagination="handleQuery"/>
+</template>
+
+<script lang="ts" setup>
+import {onMounted, reactive, toRefs} from "vue";
+
+import {
+  DeviceValueItem,
+  DeviceValueQueryParam
+} from "@/api/device/value/types";
+import {
+  deleteDeviceValueEntity,
+  listDeviceValueEntityPages,
+} from "@/api/device/value";
+import {formatDate4elTableColumn,} from '@/utils/formatter';
+
+const emit = defineEmits(['rowClick']);// 定义组件的事件通知
+
+/**
+ * 对外声明接口：父页面可以调用它
+ */
+defineExpose({refreshTable, deleteSelected, getIds, getEntities});
+
+// 数据状态：定义
+let dataState = reactive({
+  // 页面转载状态
+  loading: true,
+  // 选中ID数组
+  ids: [],
+  // 记录总数
+  total: 0,
+  // 非单个禁用
+  single: true,
+  // 非多个禁用
+  multiple: true,
+  // 查询参数
+  queryParams: {pageNum: 1, pageSize: 10} as DeviceValueQueryParam,
+  // 实体数据
+  entityList: [] as DeviceValueItem[],
+});
+
+// 数据状态：双向引用
+const {
+  // 页面转载状态
+  loading,
+  // 查询参数
+  queryParams,
+  // 实体数据
+  entityList,
+  // 记录总数
+  total,
+} = toRefs(dataState);
+
+/**
+ * 捕获列表中的选择变化
+ * @taskParam selection
+ */
+function handleSelectionChange(selection: any) {
+  dataState.ids = selection.map((item: any) => item.id);
+  dataState.single = selection.length !== 1;
+  dataState.multiple = !selection.length;
+}
+
+/**
+ * 捕获列表中的行选择
+ * @taskParam row
+ */
+function handleRowClick(row: any) {
+  emit('rowClick', row);
+}
+
+/**
+ * 刷新页面信息
+ */
+function handleQuery() {
+  emit('rowClick', {});
+
+  dataState.loading = true;
+
+  dataState.entityList = [];
+  listDeviceValueEntityPages(dataState.queryParams).then(({data}) => {
+    data.list.forEach(value => {
+      dataState.entityList.push(value);
+    });
+
+    dataState.total = data.total;
+    dataState.loading = false;
+  });
+}
+
+/**
+ * 获得选中的ID
+ */
+function getIds(): any {
+  return dataState.ids;
+}
+
+/**
+ * 获得实体信息
+ */
+function getEntities(): any {
+  return dataState.entityList;
+}
+
+/**
+ * 刷新表单
+ */
+function refreshTable(queryParams: DeviceValueQueryParam) {
+  dataState.queryParams = queryParams;
+  if (dataState.queryParams.deviceType === '') {
+    dataState.queryParams.deviceType = undefined;
+  }
+  if (dataState.queryParams.deviceName === '') {
+    dataState.queryParams.deviceName = undefined;
+  }
+
+  handleQuery();
+}
+
+/**
+ * 刷新表单
+ */
+function deleteSelected(queryParams: DeviceValueQueryParam) {
+
+  let list = [];
+  for (let id of dataState.ids) {
+    let entity = dataState.entityList.find((entity: any) => entity.id === id) as DeviceValueItem;
+    let item = {
+      deviceName: entity.deviceName,
+      objectName: entity.objectName,
+    }
+
+    list.push(item);
+  }
+
+  deleteDeviceValueEntity(list);
+}
+
+/**
+ * 响应页面安装：页面的初始化工作
+ */
+onMounted(() => {
+  // 查询实体数据
+  handleQuery();
+});
+
+</script>
