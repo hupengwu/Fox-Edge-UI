@@ -31,6 +31,7 @@ export default {
           @row-click="handleRowClick"
         >
           <el-table-column align="center" label="版本号" min-width="100" prop="version"/>
+          <el-table-column align="center" label="版本状态" min-width="100" prop="stage"/>
           <el-table-column align="center" label="说明" min-width="200" prop="description"/>
           <el-table-column :formatter="formatFileSize4elTableColumn" align="center" label="文件大小" prop="fileSize"
                            width="120"/>
@@ -52,6 +53,7 @@ export default {
               <el-tag v-else-if="scope.row.status === 4" type="warning">未安装</el-tag>
               <el-tag v-else-if="scope.row.status === 5" type="success">已安装</el-tag>
               <el-tag v-else-if="scope.row.status === 6" type="danger">破损包</el-tag>
+              <el-tag v-else-if="scope.row.status === 7" type="primary">待升级</el-tag>
               <el-tag v-else type="danger">未定义</el-tag>
             </template>
           </el-table-column>
@@ -71,6 +73,7 @@ export default {
     <el-table-column align="center" min-width="40" type="selection"/>
     <el-table-column label="模块名称" min-width="200" prop="modelName"/>
     <el-table-column label="最新版本" prop="lastVersion.version" width="120"/>
+    <el-table-column label="版本状态" prop="lastVersion.stage" width="120"/>
     <el-table-column :formatter="formatFileSize4elTableColumn2" align="center" label="文件大小" prop="lastVersion.fileSize"
                      width="120"/>
     <el-table-column :formatter="formatDate4elTableColumn2" align="center" label="上传时间" prop="lastVersion.updateTime"
@@ -86,13 +89,14 @@ export default {
 
     <el-table-column align="center" label="状态" prop="conflictStatus" width="120">
       <template #default="scope">
-        <el-tag v-if="scope.row.status === 0" type="info">未扫描</el-tag>
-        <el-tag v-else-if="scope.row.status === 1" type="info">未下载</el-tag>
-        <el-tag v-else-if="scope.row.status === 2" type="danger">已下载</el-tag>
-        <el-tag v-else-if="scope.row.status === 3" type="danger">已解压</el-tag>
-        <el-tag v-else-if="scope.row.status === 4" type="warning">未安装</el-tag>
-        <el-tag v-else-if="scope.row.status === 5" type="success">已安装</el-tag>
-        <el-tag v-else-if="scope.row.status === 6" type="danger">破损包</el-tag>
+        <el-tag v-if="scope.row.lastVersion.status === 0" type="info">未扫描</el-tag>
+        <el-tag v-else-if="scope.row.lastVersion.status === 1" type="info">未下载</el-tag>
+        <el-tag v-else-if="scope.row.lastVersion.status === 2" type="danger">已下载</el-tag>
+        <el-tag v-else-if="scope.row.lastVersion.status === 3" type="danger">已解压</el-tag>
+        <el-tag v-else-if="scope.row.lastVersion.status === 4" type="warning">未安装</el-tag>
+        <el-tag v-else-if="scope.row.lastVersion.status === 5" type="success">已安装</el-tag>
+        <el-tag v-else-if="scope.row.lastVersion.status === 6" type="danger">破损包</el-tag>
+        <el-tag v-else-if="scope.row.lastVersion.status === 7" type="primary">待升级</el-tag>
         <el-tag v-else type="danger">未定义</el-tag>
       </template>
     </el-table-column>

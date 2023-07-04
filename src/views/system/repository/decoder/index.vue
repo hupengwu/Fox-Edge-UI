@@ -95,6 +95,7 @@ function handleDownload(source: string, type: string, row: any) {
     data.modelType = version.modelType;
     data.modelName = version.modelName;
     data.version = version.version;
+    data.stage = version.stage;
     data.component = version.component;
     data.pathName = version.pathName;
     services.push(data);
@@ -127,6 +128,7 @@ function handleInstall(source: string, type: string, row: any) {
   data.modelType = version.modelType;
   data.modelName = version.modelName;
   data.version = version.version;
+  data.stage = version.stage;
   data.component = version.component;
   data.pathName = version.pathName;
 
@@ -164,6 +166,7 @@ function handleDelete(source: string, type: string, row: any) {
     data.modelType = version.modelType;
     data.modelName = version.modelName;
     data.version = version.version;
+    data.stage = version.stage;
     data.component = version.component;
     data.pathName = version.pathName;
     services.push(data);

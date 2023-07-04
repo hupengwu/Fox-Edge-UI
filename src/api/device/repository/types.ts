@@ -15,6 +15,7 @@ export interface RepositoryQueryParam extends PageQuery {
  */
 export interface RepositoryVerItem {
   version?: string;
+  stage?: string;
   component?: string;
   pathName?: string;
   description?: string;
@@ -44,11 +45,6 @@ export interface RepositoryItem extends Entity {
 }
 
 /**
- * 实体列表类型
- */
-export type RepositoryListResult = RepositoryItem[];
-
-/**
  * 实体分页项类型
  */
 export type RepositoryPageResult = PageResult<RepositoryItem[]>;
@@ -61,6 +57,7 @@ export interface CreateRepositoryRequestVO {
   modelName?: string;
   fileName?: string;
   version?: string;
+  stage?: string;
   pathName?: string;
   component?: string;
   list?: object;

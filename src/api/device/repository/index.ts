@@ -37,6 +37,7 @@ export function installEntity(data: CreateRepositoryRequestVO): AxiosPromise<Rep
       modelName: data.modelName,
       fileName: data.fileName,
       version: data.version,
+      stage: data.stage,
       component: data.component,
     },
   });
