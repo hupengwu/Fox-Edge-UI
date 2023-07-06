@@ -55,7 +55,7 @@ export default {
 </template>
 
 <script lang="ts" setup>
-import {nextTick, onMounted, reactive, ref, toRefs} from "vue";
+import {onMounted, reactive, ref, toRefs} from "vue";
 
 import {ElForm, ElMessage} from "element-plus";
 import {
@@ -155,12 +155,15 @@ function handleSubmit() {
  * @taskParam entity 实体
  */
 function initEditData(type: string, entity: OperateMonitorTaskItem) {
-  dataState.formData.templateName = entity.templateName;
-  dataState.formData.deviceType = entity.deviceType;
-  dataState.formData.templateParam = entity.templateParam;
-  dataState.formData.templateParamJson = JSON.stringify(entity.templateParam, null, 5);
-  dataState.formData.deviceIds = entity.deviceIds;
-  dataState.formData.deviceIdsJson = JSON.stringify(entity.deviceIds, null, 5);
+  debugger
+  if (entity !== undefined) {
+    dataState.formData.templateName = entity.templateName;
+    dataState.formData.deviceType = entity.deviceType;
+    dataState.formData.templateParam = entity.templateParam;
+    dataState.formData.templateParamJson = JSON.stringify(entity.templateParam, null, 5);
+    dataState.formData.deviceIds = entity.deviceIds;
+    dataState.formData.deviceIdsJson = JSON.stringify(entity.deviceIds, null, 5);
+  }
 
   if (type === 'create') {
     dataState.type = type;
@@ -185,6 +188,7 @@ function initEditData(type: string, entity: OperateMonitorTaskItem) {
  * 响应页面安装：页面的初始化工作
  */
 onMounted(() => {
+  debugger
   listOptionList("OperateEntity", "deviceType").then(({data}) => {
     deviceTypeOptions.value = data;
   });
