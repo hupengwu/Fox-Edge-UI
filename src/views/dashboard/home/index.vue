@@ -15,6 +15,7 @@ import {Indicator,} from '@/api/dashboard/types';
 const diskPieChartTableRef = ref<any>(); // 这了的变量名称必须和<device-edit-dialog>的ref值一样
 const ramPieChartTableRef = ref<any>(); // 这了的变量名称必须和<device-edit-dialog>的ref值一样
 const swapPieChartTableRef = ref<any>(); // 这了的变量名称必须和<device-edit-dialog>的ref值一样
+const cpuPieChartTableRef = ref<any>(); // 这了的变量名称必须和<device-edit-dialog>的ref值一样
 
 
 const state = reactive({
@@ -44,6 +45,14 @@ const state = reactive({
     class: "chart-container",
     items: [] as any,
   },
+  cpuPieChart: {
+    id: "cpuPieChart",
+    title: "CPU占用率",
+    height: "400px",
+    width: "100%",
+    class: "chart-container",
+    items: [] as any,
+  },
 
 });
 
@@ -53,6 +62,7 @@ const {
   diskPieChart,
   ramPieChart,
   swapPieChart,
+  cpuPieChart,
 } = toRefs(state);
 
 /**
@@ -79,6 +89,16 @@ function handleQuery() {
     swapPieChart.value.items.push({value: indicator.value.swapUsed, name: '已用空间'});
     swapPieChart.value.items.push({value: indicator.value.swapFree, name: '剩余空间'});
     swapPieChartTableRef.value.refresh();
+
+    cpuPieChart.value.title = "CPU占用率=" + (100 - indicator.value.cpuId).toFixed(1) + "%";
+    cpuPieChart.value.items = [];
+    cpuPieChart.value.items.push({value: indicator.value.cpuUs, name: '用户占比'});
+    cpuPieChart.value.items.push({value: indicator.value.cpuId, name: '空闲占比'});
+    cpuPieChart.value.items.push({
+      value: indicator.value.cpuSy + indicator.value.cpuHi + indicator.value.cpuNi + indicator.value.cpuSt + indicator.value.cpuWa,
+      name: '系统占比'
+    });
+    cpuPieChartTableRef.value.refresh();
   });
 }
 
@@ -99,19 +119,19 @@ onMounted(() => {
 
     <!-- 数据 -->
     <el-row :gutter="40" class="card-panel__col">
-      <el-col :lg="6" :sm="12" :xs="24" class="card-panel__col">
+      <el-col :lg="8" :sm="12" :xs="24" class="card-panel__col">
         <div class="card-panel">
           <div class="card-panel-icon-wrapper icon-blue">
             <svg-icon icon-class="cpu-id" size="4em"/>
           </div>
           <div class="card-panel-description">
             <div class="card-panel-text">网关序列号</div>
-            <div class="card-panel-num">{{ indicator.cpuId }}</div>
+            <div class="card-panel-num">{{ indicator.cpuUID }}</div>
           </div>
         </div>
       </el-col>
 
-      <el-col :lg="6" :sm="12" :xs="24" class="card-panel__col">
+      <el-col :lg="8" :sm="12" :xs="24" class="card-panel__col">
         <div class="card-panel">
           <div class="card-panel-icon-wrapper icon-black">
             <svg-icon icon-class="device-list" size="4em"/>
@@ -123,7 +143,7 @@ onMounted(() => {
         </div>
       </el-col>
 
-      <el-col :lg="6" :sm="12" :xs="24" class="card-panel__col">
+      <el-col :lg="8" :sm="12" :xs="24" class="card-panel__col">
         <div class="card-panel">
           <div class="card-panel-icon-wrapper icon-blue">
             <svg-icon icon-class="device-list" size="4em"/>
@@ -135,7 +155,7 @@ onMounted(() => {
         </div>
       </el-col>
 
-      <el-col :lg="6" :sm="12" :xs="24" class="card-panel__col">
+      <el-col :lg="8" :sm="12" :xs="24" class="card-panel__col">
         <div class="card-panel">
           <div class="card-panel-icon-wrapper icon-pink">
             <svg-icon icon-class="device-list" size="4em"/>
@@ -148,7 +168,7 @@ onMounted(() => {
       </el-col>
 
 
-      <el-col :lg="6" :sm="12" :xs="24" class="card-panel__col">
+      <el-col :lg="8" :sm="12" :xs="24" class="card-panel__col">
         <div class="card-panel">
           <div class="card-panel-icon-wrapper icon-green">
             <svg-icon icon-class="device-list" size="4em"/>
@@ -160,7 +180,7 @@ onMounted(() => {
         </div>
       </el-col>
 
-      <el-col :lg="6" :sm="12" :xs="24" class="card-panel__col">
+      <el-col :lg="8" :sm="12" :xs="24" class="card-panel__col">
         <div class="card-panel">
           <div class="card-panel-icon-wrapper icon-blue">
             <svg-icon icon-class="channel" size="4em"/>
@@ -172,7 +192,7 @@ onMounted(() => {
         </div>
       </el-col>
 
-      <el-col :lg="6" :sm="12" :xs="24" class="card-panel__col">
+      <el-col :lg="8" :sm="12" :xs="24" class="card-panel__col">
         <div class="card-panel">
           <div class="card-panel-icon-wrapper icon-green">
             <svg-icon icon-class="channel" size="4em"/>
@@ -185,7 +205,7 @@ onMounted(() => {
       </el-col>
 
 
-      <el-col :lg="6" :sm="12" :xs="24" class="card-panel__col">
+      <el-col :lg="8" :sm="12" :xs="24" class="card-panel__col">
         <div class="card-panel">
           <div class="card-panel-icon-wrapper icon-green">
             <svg-icon icon-class="device-object" size="4em"/>
@@ -197,7 +217,7 @@ onMounted(() => {
         </div>
       </el-col>
 
-      <el-col :lg="6" :sm="12" :xs="24" class="card-panel__col">
+      <el-col :lg="8" :sm="12" :xs="24" class="card-panel__col">
         <div class="card-panel">
           <div class="card-panel-icon-wrapper icon-green">
             <svg-icon icon-class="service-status" size="4em"/>
@@ -212,8 +232,8 @@ onMounted(() => {
     </el-row>
 
     <!-- Echarts 图表 -->
-    <el-row :gutter="40" style="margin-top: 20px">
-      <el-col :lg="8" :sm="12" :xs="24" class="card-panel__col">
+    <el-row :gutter="20" style="margin-top: 20px">
+      <el-col :lg="6" :sm="12" :xs="24" class="card-panel__col">
         <pie-chart ref="diskPieChartTableRef"
                    v-model:class="diskPieChart.class"
                    v-model:height="diskPieChart.height"
@@ -224,7 +244,18 @@ onMounted(() => {
         />
       </el-col>
 
-      <el-col :lg="8" :sm="12" :xs="24" class="card-panel__col">
+      <el-col :lg="6" :sm="12" :xs="24" class="card-panel__col">
+        <pie-chart ref="cpuPieChartTableRef"
+                   v-model:class="cpuPieChart.class"
+                   v-model:height="cpuPieChart.height"
+                   v-model:id="cpuPieChart.id"
+                   v-model:items="cpuPieChart.items"
+                   v-model:title="cpuPieChart.title"
+                   v-model:width="cpuPieChart.width"
+        />
+      </el-col>
+
+      <el-col :lg="6" :sm="12" :xs="24" class="card-panel__col">
         <pie-chart ref="ramPieChartTableRef"
                    v-model:class="ramPieChart.class"
                    v-model:height="ramPieChart.height"
@@ -235,7 +266,7 @@ onMounted(() => {
         />
       </el-col>
 
-      <el-col :lg="8" :sm="12" :xs="24" class="card-panel__col">
+      <el-col :lg="6" :sm="12" :xs="24" class="card-panel__col">
         <pie-chart ref="swapPieChartTableRef"
                    v-model:class="swapPieChart.class"
                    v-model:height="swapPieChart.height"
@@ -245,9 +276,9 @@ onMounted(() => {
                    v-model:width="swapPieChart.width"
         />
       </el-col>
-
-
     </el-row>
+
+
   </div>
 </template>
 

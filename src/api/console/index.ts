@@ -12,8 +12,8 @@ export function listConsoleEntityPages(queryParams: ConsoleQueryParam): AxiosPro
     url: '/kernel/manager/console/page',
     method: 'post',
     data: {
-      channelName: queryParams.serviceType,
-      channelType: queryParams.serviceName,
+      serviceType: queryParams.serviceType,
+      serviceName: queryParams.serviceName,
       level: queryParams.level,
       pageNum: queryParams.pageNum,
       pageSize: queryParams.pageSize

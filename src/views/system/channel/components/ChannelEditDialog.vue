@@ -27,7 +27,7 @@ export default {
 
       <!-- 下拉框：通道类型 -->
       <el-form-item label="通道类型" prop="channelType">
-        <el-select v-model="formData.channelType" :disabled="type==='update'" placeholder="请选择" filterable allow-create>
+        <el-select v-model="formData.channelType" :disabled="type==='update'" allow-create filterable placeholder="请选择">
           <el-option
             v-for="item in channelTypeOptions"
             :key="item.value"
@@ -59,7 +59,7 @@ import {nextTick, onMounted, reactive, ref, toRefs} from "vue";
 
 import {ElForm, ElMessage} from "element-plus";
 import {ChannelItem, CreateChannelRequestVO} from "@/api/channel/types";
-import {listOptionList} from "@/api/option";
+import {listChannelTypeList} from "@/api/channel";
 
 const props = defineProps(['visible']);
 const emit = defineEmits(['create', 'update', 'cancel']); //注意：这个是父组件<dict-type-edit>标签上的@close
@@ -187,9 +187,10 @@ function initEditData(type: string, entity: ChannelItem) {
  * 响应页面安装：页面的初始化工作
  */
 onMounted(() => {
-  // 查询通道类型选项，并保存在存量区
-  listOptionList("ChannelEntity", "channelType").then(({data}) => {
-    channelTypeOptions.value = data;
+  listChannelTypeList().then(({data}) => {
+    for (let type of data) {
+      channelTypeOptions.value.push({value: type, label: type} as OptionType);
+    }
   });
 });
 

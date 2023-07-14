@@ -43,6 +43,7 @@ import {
 
 import {Plus, Edit, Delete, Search, Refresh} from '@element-plus/icons-vue';
 import {listOptionList} from "@/api/option";
+import {listChannelTypeList} from "@/api/channel";
 const emit = defineEmits(['query', 'create', 'update', 'delete']);// 定义组件的事件通知
 
 
@@ -98,9 +99,10 @@ function resetQuery() {
  * 响应页面安装：页面的初始化工作
  */
 onMounted(() => {
-  // 查询通道类型选项，并保存在产量区
-  listOptionList("ChannelEntity", "channelType").then(({data}) => {
-    channelTypeOptions.value = data;
+  listChannelTypeList().then(({data}) => {
+    for (let type of data) {
+      channelTypeOptions.value.push({value: type, label: type} as OptionType);
+    }
   });
 });
 

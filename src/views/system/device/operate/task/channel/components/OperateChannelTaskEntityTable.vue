@@ -17,12 +17,12 @@ export default {
   >
     <el-table-column align="center" min-width="40" type="selection"/>
     <el-table-column align="center" label="ID" min-width="80" prop="id"/>
-    <el-table-column label="任务名称" min-width="120" prop="taskName"/>
-    <el-table-column label="通道名称" min-width="250" prop="channelName"/>
-    <el-table-column label="通道类型" min-width="120" prop="channelType"/>
-    <el-table-column label="发送模式" min-width="250" prop="sendMode"/>
-    <el-table-column label="通信超时" min-width="120" prop="timeout"/>
-    <el-table-column label="任务参数" min-width="120" prop="taskParamJson" type="expand">
+    <el-table-column label="任务名称" min-width="180" prop="taskName"/>
+    <el-table-column label="通道名称" min-width="180" prop="channelName"/>
+    <el-table-column label="通道类型" width="180" prop="channelType"/>
+    <el-table-column label="发送模式" width="120" prop="sendMode"/>
+    <el-table-column label="通信超时" width="120" prop="timeout"/>
+    <el-table-column label="任务参数" width="120" prop="taskParamJson" type="expand">
       <template #default="props">
         <el-form-item label="任务参数:">
           <el-input v-model="props.row.taskParamJson" :autosize="{ minRows: 1, maxRows: 100 }" :readonly="true"

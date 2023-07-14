@@ -5,7 +5,7 @@ export interface Indicator {
   deviceSuccessCount: number;
   deviceTypeCount: number;
   deviceFailedCount: number;
-  cpuId: string;
+  cpuUID: string;
   deviceTotalCount: number;
   channelTotalCount: number;
   channelTypeCount: number;
@@ -20,4 +20,12 @@ export interface Indicator {
   swapTotalTxt: string;
   swapUsed: number;
   swapFree: number;
+  cpuId: number;
+  cpuHi: number;
+  cpuNi: number;
+  cpuSi: number;
+  cpuSt: number;
+  cpuSy: number;
+  cpuUs: number;
+  cpuWa: number;
 }

@@ -113,7 +113,7 @@ function handleQuery() {
   listConsoleEntityPages(dataState.queryParams).then(({data}) => {
     data.list.forEach(value => {
       let item = value;
-      item.shortValue = value.value.substring(0,100);
+      item.shortValue = item.value.substring(0,100);
       dataState.entityList.push(item)
     });
 

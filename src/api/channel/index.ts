@@ -1,7 +1,7 @@
 import request from '@/utils/request';
 import {AxiosPromise} from 'axios';
 import {
-  ChannelFormData,
+  ChannelFormData, ChannelItem,
   ChannelListResult,
   ChannelPageResult,
   ChannelQueryParam,
@@ -19,6 +19,18 @@ export function listChannelEntityList(queryParams: object): AxiosPromise<Channel
     url: '/kernel/manager/channel/entities',
     method: 'post',
     data: queryParams,
+  });
+}
+
+/**
+* 获取实体分页列表
+*
+* @taskParam queryParams
+*/
+export function listChannelTypeList(): AxiosPromise<string[]> {
+  return request({
+    url: '/kernel/manager/channel/types',
+    method: 'get'
   });
 }
 
