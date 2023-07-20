@@ -92,11 +92,8 @@ function handleQuery() {
 
     cpuPieChart.value.title = "CPU占用率=" + (100 - indicator.value.cpuId).toFixed(1) + "%";
     cpuPieChart.value.items = [];
+    cpuPieChart.value.items.push({value: (100 - indicator.value.cpuId), name: '使用占比'});
     cpuPieChart.value.items.push({value: indicator.value.cpuId, name: '空闲占比'});
-    cpuPieChart.value.items.push({
-      value: (100 - indicator.value.cpuId),
-      name: '使用占比'
-    });
     cpuPieChartTableRef.value.refresh();
   });
 }
